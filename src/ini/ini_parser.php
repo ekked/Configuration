@@ -223,7 +223,10 @@ class ezcConfigurationIniParser implements Iterator
      * \r, \v, \e, \f, \\, \$, \", octal (\101), hexadecimal (\x41)
      * and Unicode code points (\u{e9}). Any other backslash is kept as it
      * is. Unlike a double quoted PHP string, variables and expressions are
-     * never interpolated: the key is data, not code.
+     * never interpolated: the key is data, not code. A key that would not be
+     * a valid PHP string (an unescaped '"', a trailing backslash, an invalid
+     * code point) is not an error either; the invalid part is kept as it is.
+     * \0 and \x00 decode to a NUL byte, as in PHP.
      *
      * @param string $dimension The dimension key without the quotes
      * @return string
