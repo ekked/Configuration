@@ -706,6 +706,25 @@ class ezcConfigurationIniReaderTest extends ezcTestCase
         $this->assertSame( $expected, $return->getSetting( 'TestSettings', 'Key' ) );
     }
 
+    public function testQuotedDimensionIsLiteral()
+    {
+        $backend = new ezcConfigurationIniReader( 'Configuration/tests/files/dimension-literal.ini' );
+        $return = $backend->load();
+
+        $expected = array(
+            '$var' => 1,
+            '${var}' => 2,
+            'a"b' => 3,
+            'trailing\\' => 4,
+            '\\u{110000}' => 5,
+            '\\u{}' => 6,
+            'un"quoted' => 7,
+            "nul\0" => 8,
+            "hexnul\0" => 9,
+        );
+        $this->assertSame( $expected, $return->getSetting( 'TestSettings', 'Key' ) );
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( 'ezcConfigurationIniReaderTest' );
